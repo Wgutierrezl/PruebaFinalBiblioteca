@@ -1,0 +1,80 @@
+﻿@page "/Autores"
+@inject IServiciosAutor ServiciosAutor
+
+<!DOCTYPE html>
+    <html>
+    <head>
+        <title>Autores</title>
+		<link rel="stylesheet" href="~/css/app.css" />
+    </head>
+    <body>
+
+		<h1>Autores</h1>
+		<p>Ver autores</p>
+		<button @onclick="GetAutores">TraerAutores</button>
+		@if(listaA!=null)
+		{
+			<table>
+				<thead>
+					<tr>
+						<th>AutorID</th>
+						<th>Nombre</th>
+						<th>Nacionalidad</th>
+						<th>FechaNacimiento</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach(Autor item in listaA)
+					{
+						<tr>
+							<td>@item.AutorID</td>
+							<td>@item.NombreAutor</td>
+							<td>@item.Nacionalidad</td>
+							<td>@item.FechaNacimiento</td>
+						</tr>
+					
+					}
+			</tbody>
+		</table>
+
+	}
+	else
+	{
+		<p>No se ha encontrado nada:@MessageGet</p>
+	}
+
+    </body>
+    </html>
+
+
+@code {
+
+	public List<Autor>? listaA { get; set; }
+	public string? MessageGet { get; set; }
+	protected async Task GetAutores()
+	{
+		try
+		{
+			string url = "https://localhost:7016/api/Autors";
+			var response = await ServiciosAutor.GetAutor<List<Autor>>(url);
+			if(!response.Error)
+			{
+				listaA = response.Response;
+				MessageGet = String.Empty;
+			}
+			else
+			{
+				listaA = null;
+				MessageGet = await response.GetErrorMessageAsync();
+			}
+
+		}catch(Exception e)
+		{
+			listaA = null;
+			MessageGet = e.Message;
+
+		}
+
+	}
+
+}

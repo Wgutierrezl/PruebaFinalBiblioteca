@@ -161,26 +161,32 @@
 
         @if (AutorPut != null)
         {
-            <div>
-                <h2>Autor Encontrado</h2>
-                <p>
-                    Modifica el Nombre del Autor:
-                    <input type="text" @bind="AutorPut.NombreAutor" required />
-                </p>
-                <p>
-                    Modifica la Nacionalidad del Autor:
-                    <input type="text" @bind="AutorPut.Nacionalidad" required />
-                </p>
-                <BSButton Color="BlazorStrap.BSColor.Success" IsOutlined="true" @onclick="PutAutor">Modificar</BSButton>
-                @if(SuccessPut!=false)
-                {
-                    <BSAlert Color="BlazorStrap.BSColor.Success" HasIcon="true">Modificado correctamente</BSAlert>
-                }
-                else
-                {
-                    <BSAlert Color="BlazorStrap.BSColor.Danger" HasIcon="true">@MessagePut</BSAlert>
-                }
-            </div>
+            <BSButton Color="BlazorStrap.BSColor.Dark" IsOutlined="true" @onclick="EditarModal">Activar Edicion</BSButton>
+            <BSModal @ref="ModalPut">
+                <BSModalHeader>
+                    <h2>Autor encontrado</h2>
+                </BSModalHeader>
+                <BSModalContent>
+                    <div class="form-group">
+                        <label for="NombreAutor">Modifique el nombre del autor:</label>
+                        <input type="text" id="NombreAutor" class="form-control" @bind="AutorPut.NombreAutor" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Nacionalidad">Modifique la nacionalidad del autor:</label>
+                        <input type="text" id="Nacionalidad" class="form-control" @bind="AutorPut.Nacionalidad" />
+                    </div>
+                    <BSButton Color="BlazorStrap.BSColor.Success" IsOutlined="true" @onclick="PutAutor">Modificar</BSButton>
+                    <BSButton Color="BlazorStrap.BSColor.Danger" IsOutlined="true" @onclick="CerrarModalEdit">Cerrar</BSButton>
+                    @if(SuccessPut!=false)
+                    {
+                        <BSAlert Color="BlazorStrap.BSColor.Success" HasIcon="true">Actualizacion Correcta</BSAlert>
+                    }
+                    else
+                    {
+                        <BSAlert Color="BlazorStrap.BSColor.Danger" HasIcon="true">@MessagePut</BSAlert>
+                    }
+                </BSModalContent>
+            </BSModal>
         }
         else
         {
@@ -383,20 +389,21 @@
         }
     }
 
+
     public BSModal? ModalPut { get; set; }
-    public void EditarModal()
+    public async Task EditarModal()
     {
         if(ModalPut!=null)
         {
-            ModalPut.ShowAsync();
+            await ModalPut.ShowAsync();
         }
     }
 
-    public void CerrarModalEdit()
+    public async Task CerrarModalEdit()
     {
         if (ModalPut != null)
         {
-            ModalPut.ToggleAsync();
+            await ModalPut.ToggleAsync();
         }
     }
 

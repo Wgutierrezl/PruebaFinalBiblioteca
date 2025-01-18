@@ -2,6 +2,199 @@
 @inject IServiciosLibro ServiciosLibro
 @inject IServiciosAutor ServiciosAutor
 
+<!DOCTYPE html>
+    <html>
+    <head>
+        <title>Libros</title>
+		<link rel="stylesheet" href="~/css/app.css" />
+    </head>
+    <body>
+		<h1>Libros</h1>
+		<BSContainer Container="Container.Large">
+			<h2>Busqueda de Libros</h2>
+			<BSButton Color="BlazorStrap.BSColor.Dark" IsOutlined="true" @onclick="GetLibro">Traer libros</BSButton>
+			@if(ListL!=null)
+			{
+				<BSTable>
+					<BSTHead>
+						<BSTR>
+							<BSTD>LibroID</BSTD>
+							<BSTD>Titulo</BSTD>
+							<BSTD>Genero</BSTD>
+							<BSTD>AutorID</BSTD>
+							<BSTD>Estado</BSTD>
+						</BSTR>
+					</BSTHead>
+					<BSTBody>
+						@foreach(Libro item in ListL)
+						{
+							<BSTR>
+								<BSTD>@item.LibroID</BSTD>
+								<BSTD>@item.NombreLibro</BSTD>
+								<BSTD>@item.Genero</BSTD>
+								<BSTD>@item.IDAutor</BSTD>
+								<BSTD>@item.Estado</BSTD>
+							</BSTR>
+						}
+					</BSTBody>
+				</BSTable>
+			
+			}
+			else
+			{
+				<BSAlert Color="BlazorStrap.BSColor.Danger" HasIcon="true">@MessageLibro</BSAlert>
+			}
+	</BSContainer>
+	<hr />
+
+	<BSContainer Container="Container.Large">
+		<h2>Busqueda filtrada de Libros</h2>
+		<p>
+			Digite el Codigo del Libro:
+			<input type="text" @bind="CodLibro" required />
+		</p>
+		<BSButton Color="BlazorStrap.BSColor.Dark" IsOutlined="true" @onclick="Gefiltrado">Traerlo</BSButton>
+		@if(libro!=null)
+		{
+			<BSTable>
+				<BSTHead>
+					<BSTR>
+						<BSTD>LibroID</BSTD>
+						<BSTD>Titulo</BSTD>
+						<BSTD>Genero</BSTD>
+						<BSTD>AutorID</BSTD>
+						<BSTD>Estado</BSTD>
+					</BSTR>
+				</BSTHead>
+				<BSTBody>	
+						<BSTR>
+							<BSTD>@libro.LibroID</BSTD>
+							<BSTD>@libro.NombreLibro</BSTD>
+							<BSTD>@libro.Genero</BSTD>
+							<BSTD>@libro.IDAutor</BSTD>
+							<BSTD>@libro.Estado</BSTD>
+						</BSTR>	
+				</BSTBody>
+			</BSTable>
+			
+		}
+		else
+		{
+			<BSAlert Color="BlazorStrap.BSColor.Danger" HasIcon="true">@MessageGetID</BSAlert>
+		}
+	</BSContainer>
+
+	<hr />
+
+	<BSContainer Container="Container.Large">
+		<h2>Eliminar Libros</h2>
+		<p>
+			Digite el codigo del Libro para eliminar:
+			<input type="text" @bind="CodDelete" required />
+		</p>
+		<BSButton Color="BlazorStrap.BSColor.Dark" IsOutlined="true" @onclick="EliminarLibro">Eliminarlos</BSButton>
+		@if(SuccessDelete!=false)
+		{
+			<BSAlert Color="BlazorStrap.BSColor.Success" HasIcon="true">Eliminacion Correcta</BSAlert>
+		}
+		else
+		{
+			<BSAlert Color="BlazorStrap.BSColor.Danger" HasIcon="true">@MessageDelete</BSAlert>
+		}
+	</BSContainer>
+
+	<hr />
+
+	<BSContainer Container="Container.Large">
+		<h2>Formulario para insertar Libros</h2>
+		<BSButton Color="BlazorStrap.BSColor.Dark" IsOutlined="true" @onclick="ModalInsert">Activar formulario</BSButton>
+
+		<BSModal @ref="Minsert">
+			<BSModalHeader>
+				<h2>Insertar Libros</h2>
+			</BSModalHeader>
+			<BSModalContent>
+				<div class="form-group">
+					<label for="NombreAutor">Titulo:</label>
+					<input type="text" id="NombreAutor" class="form-control" @bind="LibroPost.NombreLibro" />
+				</div>
+				<div class="form-group">
+					<label for="Nacionalidad">Genero:</label>
+					<input type="text" id="Nacionalidad" class="form-control" @bind="LibroPost.Genero" />
+				</div>
+				<div class="form-group">
+					<label for="FechaNacimiento">Codigo de Autor:</label>
+					<input type="text" id="FechaNacimiento" class="form-control" @bind="LibroPost.IDAutor" />
+				</div>
+				<div class="form-group">
+					<label for="FechaNacimiento">Estado:</label>
+					<input type="text" id="FechaNacimiento" class="form-control" @bind="LibroPost.Estado" />
+				</div>
+				<BSButton Color="BlazorStrap.BSColor.Success" IsOutlined="true" @onclick="PostLibros">Insertar</BSButton>
+				<BSButton Color="BlazorStrap.BSColor.Danger" IsOutlined="true" @onclick="CerrarModal">cerrar</BSButton>
+				@if(SuccessPost!=false)
+				{
+					<BSAlert Color="BlazorStrap.BSColor.Success" HasIcon="true">Insercion Realizada</BSAlert>
+				}
+				else
+				{
+					<BSAlert Color="BlazorStrap.BSColor.Danger" HasIcon="true">@MessagePost</BSAlert>
+				}
+			</BSModalContent>
+		</BSModal>
+	</BSContainer>
+
+	<hr />
+
+	<BSContainer Container="Container.Large">
+		<h2>Modificar registro de Libros</h2>
+		<p>
+			Digite el codigo del Libro a modificar:
+			<input type="text" @bind="CodPut" required />
+		</p>
+		<BSButton Color="BlazorStrap.BSColor.Primary" IsOutlined="true" @onclick="GetPutLibros">Buscarlo</BSButton>
+		@if(LibroPut!=null)
+		{
+			<div>
+				<h2>Libro encontrado</h2>
+				<p>
+					Modifique el Nombre del Libro:
+					<input type="text" @bind="LibroPut.NombreLibro" required />
+				</p>
+				<p>
+					Modifique el Genero del Libro:
+					<input type="text" @bind="LibroPut.Genero" required />
+				</p>
+				<p>
+					Modifique el codigo del autor del Libro:
+					<input type="text" @bind="LibroPut.IDAutor" required />
+				</p>
+				<p>
+					Modifique la disponibilidad del Libro:
+					<input type="text" @bind="LibroPut.Estado" required />
+				</p>
+				<BSButton Color="BlazorStrap.BSColor.Primary" IsOutlined="true" @onclick="PutLibro">Modificar</BSButton>
+				@if(SuccessPut!=null)
+				{
+					<BSAlert Color="BlazorStrap.BSColor.Success" HasIcon="true">Modificado correctamente</BSAlert>
+				}
+				else
+				{
+					<BSAlert Color="BlazorStrap.BSColor.Danger" HasIcon="true">@MessagePut</BSAlert>
+				}
+
+			</div>
+		}
+		else
+		{
+			<BSAlert Color="BlazorStrap.BSColor.Danger" HasIcon="true">@MessageGetPut</BSAlert>
+		}
+	</BSContainer>
+
+    
+    </body>
+    </html>
+
 @code {
 
 	//Metodo para traer todos los libros
@@ -154,7 +347,7 @@
 	//Se modifica la informacion ya que se ha encontrado el libro
 	public bool SuccessPut = false;
 	public string? MessagePut { get; set; }
-	protected async Task PutAutor()
+	protected async Task PutLibro()
 	{
 		try
 		{
@@ -177,6 +370,25 @@
 		{
 			SuccessPut = false;
 			MessagePut = e.Message;
+		}
+	}
+
+	//Metodo para poder activar el modal
+	public BSModal? Minsert { get; set; }
+	public async Task ModalInsert()
+	{
+		if(Minsert!=null)
+		{
+			await Minsert.ToggleAsync();
+		}
+
+	}
+
+	public async Task CerrarModal()
+	{
+		if(Minsert!=null)
+		{
+			await Minsert.ToggleAsync();
 		}
 	}
 

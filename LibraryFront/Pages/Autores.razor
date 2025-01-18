@@ -161,45 +161,26 @@
 
         @if (AutorPut != null)
         {
-            <BSModal @ref="ModalPut" HideOnValidSubmit="true" IsStaticBackdrop="true">
-                <BSForm Model="AutorPut" OnValidSubmit="@PutAutor">
-                    <DataAnnotationsValidator />
-                    <BSModalHeader>
-                        <h2>Autor Encontrado</h2>
-                    </BSModalHeader>
-                    <BSModalContent>
-                        <BSValidationSummary />
-                        <div class="mb-3">
-                            <BSLabel>Edite el Nombre del Autor</BSLabel>
-                            <input type="text" @bind="AutorPut.NombreAutor" required class="form-control" />
-                            <BSFeedback For="@(() => AutorPut.NombreAutor)" />
-                        </div>
-                        <div class="mb-3">
-                            <BSLabel>Edite la Nacionalidad del Autor</BSLabel>
-                            <input type="text" @bind="AutorPut.Nacionalidad" required class="form-control" />
-                            <BSFeedback For="@(() => AutorPut.Nacionalidad)" />
-                        </div>
-                        <div class="mb-3">
-                            <BSLabel>Edite la Fecha de Nacimiento</BSLabel>
-                            <input type="date" @bind="AutorPut.FechaNacimiento" required class="form-control" />
-                            <BSFeedback For="@(() => AutorPut.FechaNacimiento)" />
-                        </div>
-                    </BSModalContent>
-                    <BSModalFooter>
-                        <BSButton @onclick="CerrarModalEdit" Color="BlazorStrap.BSColor.Primary">Cerrar</BSButton>
-                        <BSButton IsSubmit="true" Color="BlazorStrap.BSColor.Success">Modificar</BSButton>
-                    </BSModalFooter>
-                </BSForm>
-            </BSModal>
-
-            @if (SuccessPut)
-            {
-                <BSAlert Color="BlazorStrap.BSColor.Success" HasIcon="true">Modificado correctamente</BSAlert>
-            }
-            else if (!string.IsNullOrWhiteSpace(MessagePut))
-            {
-                <BSAlert Color="BlazorStrap.BSColor.Danger" HasIcon="true">@MessagePut</BSAlert>
-            }
+            <div>
+                <h2>Autor Encontrado</h2>
+                <p>
+                    Modifica el Nombre del Autor:
+                    <input type="text" @bind="AutorPut.NombreAutor" required />
+                </p>
+                <p>
+                    Modifica la Nacionalidad del Autor:
+                    <input type="text" @bind="AutorPut.Nacionalidad" required />
+                </p>
+                <BSButton Color="BlazorStrap.BSColor.Success" IsOutlined="true" @onclick="PutAutor">Modificar</BSButton>
+                @if(SuccessPut!=false)
+                {
+                    <BSAlert Color="BlazorStrap.BSColor.Success" HasIcon="true">Modificado correctamente</BSAlert>
+                }
+                else
+                {
+                    <BSAlert Color="BlazorStrap.BSColor.Danger" HasIcon="true">@MessagePut</BSAlert>
+                }
+            </div>
         }
         else
         {
@@ -207,8 +188,6 @@
         }
     </BSContainer>
 
-
-    
     </body>
     </html>
 

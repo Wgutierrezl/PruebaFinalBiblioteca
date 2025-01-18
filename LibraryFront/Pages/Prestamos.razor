@@ -2,7 +2,236 @@
 @inject IServiciosPrestamo ServiciosPrestamo
 @inject IServiciosLibro ServiciosLibro
 
+<!DOCTYPE html>
+    <html>
+    <head>
+        <title>Prestamos</title>
+		<link rel="stylesheet" href="~/css/app.css" />
+    </head>
+    <body>
+		<h1>Prestamos</h1>
+		<hr />
 
+		<BSContainer Container="Container.Large">
+			<h2>Busqueda de Prestamos</h2>
+			<p>
+				Traer todos los prestamos hechos:
+			</p>
+			<BSButton Color="BlazorStrap.BSColor.Primary" IsOutlined="true" @onclick="TraerPrestamos">Traerlos</BSButton>
+			@if(ListaP!=null)
+			{
+				<BSTable>
+					<BSTHead>
+						<BSTR>
+							<BSTD>PrestamoID</BSTD>
+							<BSTD>Codigo Libro</BSTD>
+							<BSTD>Nombre Cliente</BSTD>
+							<BSTD>FechaPrestamo</BSTD>
+							<BSTD>FechaDevolucion</BSTD>
+							<BSTD>Estado</BSTD>
+						</BSTR>
+					</BSTHead>
+					<BSTBody>
+						@foreach(Prestamo item in ListaP)
+						{
+							<BSTR>
+								<BSTD>@item.PrestamoID</BSTD>
+								<BSTD>@item.IDLibro</BSTD>
+								<BSTD>@item.NombreMiembro</BSTD>
+								<BSTD>@item.FechaPrestamo</BSTD>
+								<BSTD>@item.FechaDevolucion</BSTD>
+								<BSTD>@item.Estado</BSTD>
+							</BSTR>
+						
+						}
+					</BSTBody>
+			</BSTable>
+			<BSAlert Color="BlazorStrap.BSColor.Success" HasIcon="true">Peticion Exitosa</BSAlert>
+
+		}
+		else
+		{
+			<BSAlert Color="BlazorStrap.BSColor.Danger" HasIcon="true">@MessagePrestamo</BSAlert>
+		}
+	</BSContainer>
+	<hr />
+
+	<BSContainer Container="Container.Large">
+		<h2>Busqueda filtrada de libros</h2>
+		<p>
+			Digite el codigo del Prestamo:
+			<input type="text" @bind="CodPrestamo" required />
+		</p>
+		<BSButton Color="BlazorStrap.BSColor.Primary" IsOutlined="true" @onclick="PrestamoFiltrado">Traerlo</BSButton>
+		@if (prestamo != null)
+		{
+			<BSTable>
+				<BSTHead>
+					<BSTR>
+						<BSTD>PrestamoID</BSTD>
+						<BSTD>Codigo Libro</BSTD>
+						<BSTD>Nombre Cliente</BSTD>
+						<BSTD>FechaPrestamo</BSTD>
+						<BSTD>FechaDevolucion</BSTD>
+						<BSTD>Estado</BSTD>
+					</BSTR>
+				</BSTHead>
+				<BSTBody>
+						<BSTR>
+							<BSTD>@prestamo.PrestamoID</BSTD>
+							<BSTD>@prestamo.IDLibro</BSTD>
+							<BSTD>@prestamo.NombreMiembro</BSTD>
+							<BSTD>@prestamo.FechaPrestamo</BSTD>
+							<BSTD>@prestamo.FechaDevolucion</BSTD>
+							<BSTD>@prestamo.Estado</BSTD>
+						</BSTR>
+				</BSTBody>
+			</BSTable>
+			<BSAlert Color="BlazorStrap.BSColor.Success" HasIcon="true">Peticion Exitosa</BSAlert>
+		}
+		else
+		{
+			<BSAlert Color="BlazorStrap.BSColor.Danger" HasIcon="true">@MessageGet</BSAlert>
+		}
+	</BSContainer>
+	<hr />
+
+	<BSContainer Container="Container.Large">
+		<h2>Eliminar registro de prestamos</h2>
+		<p>
+			Digite el codigo del prestamo a eliminar:
+			<input type="text" @bind="CodDelete" required />
+		</p>
+		<BSButton Color="BlazorStrap.BSColor.Primary" IsOutlined="true" @onclick="EliminarPrestamo">Eliminar</BSButton>
+		@if(SuccessDelete!=false)
+		{
+			<BSAlert Color="BlazorStrap.BSColor.Success" HasIcon="true">Eliminacion Exitosa</BSAlert>
+		}
+		else
+		{
+			<BSAlert Color="BlazorStrap.BSColor.Danger" HasIcon="true">@MessageDelete</BSAlert>
+		}
+	</BSContainer>
+
+	<hr />
+
+	<BSContainer Container="Container.Large">
+		<h2>Formulario para agregar prestamos</h2>
+		<p>
+			Selecciona el libro que desees:
+		</p>
+		<BSButton Color="BlazorStrap.BSColor.Primary" IsOutlined="true" @onclick="GetLibro">Seleccionar</BSButton>
+		@if(ListL!=null)
+		{
+			<BSTable>
+				<BSTHead>
+					<BSTR>
+						<BSTD>LibroID</BSTD>
+						<BSTD>Titulo</BSTD>
+						<BSTD>Genero</BSTD>
+						<BSTD>Estado</BSTD>
+					</BSTR>
+				</BSTHead>
+				<BSTBody>
+					@foreach (Libro item in ListL)
+					{
+						<BSTR @onclick="() => EleccionLibro(item)">
+							<BSTD>@item.LibroID</BSTD>
+							<BSTD>@item.NombreLibro</BSTD>
+							<BSTD>@item.Genero</BSTD>
+							<BSTD>@item.Estado</BSTD>
+						</BSTR>
+					}
+				</BSTBody>
+			</BSTable>
+			<p>Codigo Seleccionado:@CodLibro</p>
+		}
+
+		<p>
+			Digite su nombre:
+			<input type="text" @bind="PrestamoPost.NombreMiembro" required />
+		</p>
+		<p>
+			Fecha de prestamo:
+			<input type="text" value="@FechaActual.ToString("yyyy-MM-dd")" readonly />
+		</p>
+		<p>
+			Digite la fecha en que devolvera el libro:
+			<input type="date" @bind="PrestamoPost.FechaDevolucion" required />
+		</p>
+		<select id="Operacion" @bind="Estado">
+			<option value="Pendiente">Pendiente</option>
+			<option value="Devuelto">Devuelto</option>
+		</select>
+		<p>Estado seleccionado:@Estado</p>
+		<BSButton Color="BlazorStrap.BSColor.Primary" IsOutlined="true" @onclick="PostPrestamos">Agregar</BSButton>
+		@if(SuccessPost!=false)
+		{
+			<BSAlert Color="BlazorStrap.BSColor.Success" HasIcon="true">Insercion Correcta</BSAlert>
+		}
+		else
+		{
+			<BSAlert Color="BlazorStrap.BSColor.Danger" HasIcon="true">@MessagePost</BSAlert>
+		}
+	</BSContainer>
+
+	<hr />
+
+	<BSContainer Container="Container.Large">
+		<h2>Modificar la informacion de un prestamo</h2>
+		<p>
+			Digita el codigo de prestamo a modificar:
+			<input type="text" @bind="CodPut" required />
+		</p>
+		<BSButton Color="BlazorStrap.BSColor.Primary" IsOutlined="true" @onclick="GetPutPrestamo">Buscarlo</BSButton>	
+		@if (PrestamoPut != null)
+		{
+			<BSButton Color="BlazorStrap.BSColor.Dark" IsOutlined="true" @onclick="Modalbase">Activar formulario</BSButton>
+
+			<BSModal @ref="ModalEdit">
+				<BSModalHeader>
+					<h2>Prestamo Encontrado</h2>
+				</BSModalHeader>
+				<BSModalContent>
+					<div class="form-group">
+						<label for="NombreAutor">Modifique el codigo del libro:</label>
+						<input type="text" id="NombreAutor" class="form-control" @bind="PrestamoPut.IDLibro" />
+					</div>
+					<div class="form-group">
+						<label for="Nacionalidad">Modifique la fecha de devolucion:</label>
+						<input type="date" id="Nacionalidad" class="form-control" @bind="PrestamoPut.FechaDevolucion" />
+					</div>
+					<div class="form-group">
+						<label for="FechaNacimiento">Modifique el nombre del Cliente:</label>
+						<input type="text" id="FechaNacimiento" class="form-control" @bind="PrestamoPut.NombreMiembro" />
+					</div>
+					<div class="form-group">
+						<label for="FechaNacimiento">Modifique el estado:</label>
+						<input type="text" id="FechaNacimiento" class="form-control" @bind="PrestamoPut.Estado" />
+					</div>
+					<BSButton Color="BlazorStrap.BSColor.Success" IsOutlined="true" @onclick="PutPrestamo">Modificar</BSButton>
+					<BSButton Color="BlazorStrap.BSColor.Danger" IsOutlined="true" @onclick="ModalbaseCerrar">Cerrar</BSButton>
+					@if(SuccessPut!=false)
+					{
+						<BSAlert Color="BlazorStrap.BSColor.Success" HasIcon="true">Actualizacion Correcta</BSAlert>
+					}
+					else
+					{
+						<BSAlert Color="BlazorStrap.BSColor.Danger" HasIcon="true">@MessagePut</BSAlert>
+					}
+				</BSModalContent>
+			</BSModal>
+		}
+		else
+		{
+			<BSAlert Color="BlazorStrap.BSColor.Danger" HasIcon="true">@MessageGetPut</BSAlert>
+		}
+	</BSContainer>
+
+
+    
+    </body>
+    </html>
 
 @code {
 
@@ -98,8 +327,15 @@
 	public Prestamo PrestamoPost { get; set; } = new Prestamo();
 	public bool SuccessPost = false;
 	public string? MessagePost { get; set; }
+	public DateOnly FechaActual { get; set; }
+	public string? Estado { get; set; } 
 	protected async Task PostPrestamos()
 	{
+		FechaActual = DateOnly.FromDateTime(DateTime.Now);
+		PrestamoPost.IDLibro = CodLibro;
+		PrestamoPost.FechaPrestamo = FechaActual;
+		PrestamoPost.Estado = Estado;
+
 		try
 		{
 			string url = "https://localhost:7016/api/Prestamoes";
@@ -129,7 +365,7 @@
 	public int CodPut { get; set; }
 	public Prestamo? PrestamoPut { get; set; }
 	public string? MessageGetPut { get; set; }
-	protected async Task GetPutLibros()
+	protected async Task GetPutPrestamo()
 	{
 		try
 		{
@@ -158,7 +394,7 @@
 	//Se modifica la informacion ya que se ha encontrado el libro
 	public bool SuccessPut = false;
 	public string? MessagePut { get; set; }
-	protected async Task PutAutor()
+	protected async Task PutPrestamo()
 	{
 		try
 		{
@@ -184,5 +420,62 @@
 		}
 	}
 
+
+	//Metodo para traer libros
+	public List<Libro>? ListL { get; set; }
+	public string? MessageLibro { get; set; }
+	protected async Task GetLibro()
+	{
+		try
+		{
+			string url = "https://localhost:7016/api/Libroes";
+			var response = await ServiciosLibro.GetLibro<List<Libro>>(url);
+			if (!response.Error)
+			{
+				ListL = response.Response;
+				MessageLibro = String.Empty;
+			}
+			else
+			{
+				ListL = null;
+				MessageLibro = await response.GetErrorMessageAsync();
+			}
+
+		}
+		catch (Exception e)
+		{
+			ListL = null;
+			MessageLibro = e.Message;
+
+		}
+
+	}
+
+
+	public int CodLibro { get; set; }
+	public void EleccionLibro(Libro item)
+	{
+		CodLibro = item.LibroID;
+	}
+
+
+	public BSModal? ModalEdit { get; set; }
+	public async Task Modalbase()
+	{
+		if(ModalEdit!=null)
+		{
+			await ModalEdit.ToggleAsync();
+		}
+
+	}
+
+	public async Task ModalbaseCerrar()
+	{
+		if (ModalEdit != null)
+		{
+			await ModalEdit.ToggleAsync();
+		}
+
+	}
 
 }

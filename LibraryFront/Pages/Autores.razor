@@ -12,27 +12,9 @@
         <button @onclick="GetAutores">Traer Autores</button>
         @if(listaA!=null)
         {
-            <table>
-                <thead>
-                    <tr>
-                        <th>AutorID</th>
-                        <th>Nombre</th>
-                        <th>Nacionalidad</th>
-                        <th>Fecha Nacimiento</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach(Autor item in listaA)
-                     {
-                        <tr>
-                            <td>@item.AutorID</td>
-                            <td>@item.NombreAutor</td>
-                            <td>@item.Nacionalidad</td>
-                            <td>@item.FechaNacimiento</td>
-                        </tr>
-                    }
-            </tbody>
-        </table>
+            <BSTable Color="OTableColor">
+
+            </BSTable>
 
     }
     else

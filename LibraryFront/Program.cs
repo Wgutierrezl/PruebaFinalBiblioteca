@@ -1,3 +1,4 @@
+using BlazorStrap;
 using LibraryFront;
 using LibraryFront.Servicios;
 using Microsoft.AspNetCore.Components.Web;
@@ -11,6 +12,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https:/
 builder.Services.AddScoped<IServiciosAutor,ServiciosAutor>();
 builder.Services.AddScoped<IServiciosLibro,ServiciosLibro>();
 builder.Services.AddScoped<IServiciosPrestamo,ServiciosPrestamo>();
+builder.Services.AddBlazorStrap();
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 

@@ -1,5 +1,188 @@
 ﻿@page "/Prestamos"
+@inject IServiciosPrestamo ServiciosPrestamo
+@inject IServiciosLibro ServiciosLibro
+
+
 
 @code {
+
+	//Metodo get para traer todos los Prestamos
+	public List<Prestamo>? ListaP { get; set; }
+	public string? MessagePrestamo { get; set; }
+	protected async Task TraerPrestamos()
+	{
+		try
+		{
+			string url = "https://localhost:7016/api/Prestamoes";
+			var response = await ServiciosPrestamo.GetPrestamo<List<Prestamo>>(url);
+			if(!response.Error)
+			{
+				ListaP = response.Response;
+				MessagePrestamo = String.Empty;
+			}
+			else
+			{
+				ListaP = null;
+				MessagePrestamo = await response.GetErrorMessageAsync();
+			}
+
+		}catch(Exception e)
+		{
+			ListaP = null;
+			MessagePrestamo = e.Message;
+
+		}
+	}
+
+	//Metodo para filtrar prestamos
+	public Prestamo? prestamo { get; set; }
+	public int CodPrestamo { get; set; }
+	public string? MessageGet { get; set; }
+	protected async Task PrestamoFiltrado()
+	{
+		try
+		{
+			string url = "https://localhost:7016/api/Prestamoes/"+CodPrestamo;
+			var response = await ServiciosPrestamo.GetPrestamo<Prestamo>(url);
+			if (!response.Error)
+			{
+				prestamo = response.Response;
+				MessageGet = String.Empty;
+			}
+			else
+			{
+				prestamo = null;
+				MessageGet = await response.GetErrorMessageAsync();
+			}
+
+		}
+		catch (Exception e)
+		{
+			prestamo = null;
+			MessageGet = e.Message;
+
+		}
+	}
+
+	//Metodo para eliminar un prestamo
+	public int CodDelete { get; set; }
+	public bool SuccessDelete = false;
+	public string? MessageDelete { get; set; }
+	protected async Task EliminarPrestamo()
+	{
+		try
+		{
+			string url = "https://localhost:7016/api/Prestamoes/" + CodDelete;
+			var response = await ServiciosPrestamo.DeletePrestamo(url);
+			if (!response.Error)
+			{
+				SuccessDelete = true;
+				MessageDelete = String.Empty;
+			}
+			else
+			{
+				SuccessDelete = false;
+				MessageDelete = await response.GetErrorMessageAsync();
+			}
+
+		}
+		catch (Exception e)
+		{
+			SuccessDelete = false;
+			MessageDelete = e.Message;
+
+		}
+	}
+
+	//Metodo para insertar un prestamo
+	public Prestamo PrestamoPost { get; set; } = new Prestamo();
+	public bool SuccessPost = false;
+	public string? MessagePost { get; set; }
+	protected async Task PostPrestamos()
+	{
+		try
+		{
+			string url = "https://localhost:7016/api/Prestamoes";
+			var response = await ServiciosPrestamo.PostPrestamo<Prestamo>(url,PrestamoPost);
+			if (!response.Error)
+			{
+				SuccessPost = true;
+				MessagePost = String.Empty;
+			}
+			else
+			{
+				SuccessPost = false;
+				MessagePost = await response.GetErrorMessageAsync();
+			}
+
+		}
+		catch (Exception e)
+		{
+			SuccessPost = false;
+			MessagePost = e.Message;
+
+		}
+	}
+
+	//Metodo para editar un prestamo
+
+	public int CodPut { get; set; }
+	public Prestamo? PrestamoPut { get; set; }
+	public string? MessageGetPut { get; set; }
+	protected async Task GetPutLibros()
+	{
+		try
+		{
+			string url = "https://localhost:7016/api/Prestamoes/" + CodPut;
+			var response = await ServiciosPrestamo.GetPrestamo<Prestamo>(url);
+			if (!response.Error)
+			{
+				PrestamoPut = response.Response;
+				MessageGetPut = String.Empty;
+			}
+			else
+			{
+				PrestamoPut = null;
+				MessageGetPut = await response.GetErrorMessageAsync();
+			}
+		}
+		catch (Exception e)
+		{
+			PrestamoPut = null;
+			MessageGetPut = e.Message;
+		}
+
+	}
+
+
+	//Se modifica la informacion ya que se ha encontrado el libro
+	public bool SuccessPut = false;
+	public string? MessagePut { get; set; }
+	protected async Task PutAutor()
+	{
+		try
+		{
+			string url = "https://localhost:7016/api/Prestamoes/" + CodPut;
+			var response = await ServiciosPrestamo.PutPrestamo<Prestamo>(url, PrestamoPut);
+			if (!response.Error)
+			{
+				SuccessPut = true;
+				MessagePut = String.Empty;
+
+			}
+			else
+			{
+				SuccessPut = false;
+				MessagePut = await response.GetErrorMessageAsync();
+			}
+
+		}
+		catch (Exception e)
+		{
+			SuccessPut = false;
+			MessagePut = e.Message;
+		}
+	}
+
 
 }

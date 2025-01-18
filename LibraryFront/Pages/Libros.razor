@@ -1,5 +1,183 @@
 ﻿@page "/Libros"
+@inject IServiciosLibro ServiciosLibro
+@inject IServiciosAutor ServiciosAutor
 
 @code {
+
+	//Metodo para traer todos los libros
+	public List<Libro>? ListL { get; set; }
+	public string? MessageLibro { get; set; }
+	protected async Task GetLibro()
+	{
+		try
+		{
+			string url = "https://localhost:7016/api/Libroes";
+			var response = await ServiciosLibro.GetLibro<List<Libro>>(url);
+			if(!response.Error)
+			{
+				ListL = response.Response;
+				MessageLibro = String.Empty;
+			}
+			else
+			{
+				ListL = null;
+				MessageLibro = await response.GetErrorMessageAsync();
+			}
+
+		}catch(Exception e)
+		{
+			ListL = null;
+			MessageLibro = e.Message;
+
+		}
+
+	}
+
+	//Metodo para filtrar Libros
+	public Libro? libro { get; set; }
+	public int CodLibro { get; set; }
+	public string? MessageGetID { get; set; }
+	protected async Task Gefiltrado()
+	{
+		try
+		{
+			string url = "https://localhost:7016/api/Libroes/"+CodLibro;
+			var response = await ServiciosLibro.GetLibro<Libro>(url);
+			if(!response.Error)
+			{
+				libro = response.Response;
+				MessageGetID = String.Empty;
+			}
+			else
+			{
+				libro = null;
+				MessageGetID = await response.GetErrorMessageAsync();
+			}
+
+		}catch (Exception e)
+		{
+			libro = null;
+			MessageGetID = e.Message;
+
+		}
+
+	}
+
+	//Metodo para eliminar un libro
+	public int CodDelete { get; set; }
+	public bool SuccessDelete =false;
+	public string? MessageDelete { get; set; }
+	protected async Task EliminarLibro()
+	{
+		try
+		{
+			string url = "https://localhost:7016/api/Libroes/" + CodDelete;
+			var response = await ServiciosLibro.DeleteLibro(url);
+			if (!response.Error)
+			{
+				SuccessDelete = true;
+				MessageDelete = String.Empty;
+			}
+			else
+			{
+				SuccessDelete = false;
+				MessageDelete = await response.GetErrorMessageAsync();
+			}
+		}catch(Exception e)
+		{
+			SuccessDelete = false;
+			MessageDelete = e.Message;
+		}
+	}
+
+	//Metodod para agregar un libro
+	public Libro LibroPost { get; set; } = new Libro();
+	public bool SuccessPost=false;
+	public string? MessagePost { get; set; }
+
+	protected async Task PostLibros()
+	{
+		try
+		{
+			string url = "https://localhost:7016/api/Libroes";
+			var response = await ServiciosLibro.PostLibro<Libro>(url, LibroPost);
+			if (!response.Error)
+			{
+				SuccessPost = true;
+				MessagePost = String.Empty;
+			}
+			else
+			{
+				SuccessPost = false;
+				MessagePost = await response.GetErrorMessageAsync();
+			}
+		}
+		catch (Exception e)
+		{
+			SuccessPost = false;
+			MessagePost = e.Message;
+		}
+	}
+
+	//Metodo para editar la informacion de un libro
+
+	//Primero se busca un libro, si el libro esta, se ha de modificar la informacion que necesite el usuario
+	public int CodPut { get; set; }
+	public Libro? LibroPut { get; set; }
+	public string? MessageGetPut { get; set; }
+	protected async Task GetPutLibros()
+	{
+		try
+		{
+			string url = "https://localhost:7016/api/Libroes/" + CodPut;
+			var response = await ServiciosLibro.GetLibro<Libro>(url);
+			if (!response.Error)
+			{
+				LibroPut = response.Response;
+				MessageGetPut = String.Empty;
+			}
+			else
+			{
+				LibroPut = null;
+				MessageGetPut = await response.GetErrorMessageAsync();
+			}
+		}
+		catch (Exception e)
+		{
+			LibroPut = null;
+			MessageGetPut = e.Message;
+		}
+
+	}
+
+
+	//Se modifica la informacion ya que se ha encontrado el libro
+	public bool SuccessPut = false;
+	public string? MessagePut { get; set; }
+	protected async Task PutAutor()
+	{
+		try
+		{
+			string url = "https://localhost:7016/api/Libroes/" + CodPut;
+			var response = await ServiciosLibro.PutLibro<Libro>(url, LibroPut);
+			if (!response.Error)
+			{
+				SuccessPut = true;
+				MessagePut = String.Empty;
+
+			}
+			else
+			{
+				SuccessPut = false;
+				MessagePut = await response.GetErrorMessageAsync();
+			}
+
+		}
+		catch (Exception e)
+		{
+			SuccessPut = false;
+			MessagePut = e.Message;
+		}
+	}
 
 }

@@ -9,18 +9,86 @@
     </head>
     <body>
         <h1>Autores</h1>
-        <button @onclick="GetAutores">Traer Autores</button>
-        @if(listaA!=null)
+
+        <BSContainer Container="Container.Large">
+            <h2>Traer todos los Autores Registrados</h2>
+        <BSButton Color="BlazorStrap.BSColor.Primary" IsOutlined="true" @onclick="GetAutores">Buscarlos</BSButton>
+        @if (listaA != null)
         {
-            <BSTable Color="OTableColor">
-
+            <BSTable Class="table table-striped table-bordered table-hover">
+                <BSTHead>
+                    <BSTR>
+                        <BSTD Class="bg-primary text-white">AutorID</BSTD>
+                        <BSTD Class="bg-primary text-white">Nombre</BSTD>
+                        <BSTD Class="bg-primary text-white">Nacionalidad</BSTD>
+                        <BSTD Class="bg-primary text-white">Fecha Nacimiento</BSTD>
+                    </BSTR>
+                </BSTHead>
+                <BSTBody>
+                    @foreach (Autor item in listaA)
+                    {
+                        <BSTR>
+                            <BSTD>@item.AutorID</BSTD>
+                            <BSTD>@item.NombreAutor</BSTD>
+                            <BSTD>@item.Nacionalidad</BSTD>
+                            <BSTD>@item.FechaNacimiento</BSTD>
+                        </BSTR>
+                    }
+                </BSTBody>
             </BSTable>
+            <BSAlert Color="BlazorStrap.BSColor.Success" HasIcon="true">Peticion Exitosa</BSAlert>
 
-    }
-    else
-    {
-       <p class="alert-danger">Ha ocurrido un error:@MessageGet</p> 
-    }
+        }
+        else
+        {
+            <BSAlert Color="BlazorStrap.BSColor.Warning" HasIcon="true">@MessageGet</BSAlert>
+        }
+        </BSContainer>
+        <hr />
+        <BSContainer Container="Container.Large">
+            <h1>Busqueda filtrada de Autores</h1>
+            <p>
+                Digite el Codigo del Autor:
+                <input type="text" @bind="CodAutor" required />
+            </p>
+        <BSButton Color="BlazorStrap.BSColor.Primary" IsOutlined="true" @onclick="TraerAutor">Traerlo</BSButton>
+          @if(autor!=null)
+            {
+            <BSTable Class="table table-striped table-bordered table-hover">
+                <BSTHead>
+                    <BSTR>
+                        <BSTD Class="bg-primary text-white">AutorID</BSTD>
+                        <BSTD Class="bg-primary text-white">Nombre</BSTD>
+                        <BSTD Class="bg-primary text-white">Nacionalidad</BSTD>
+                        <BSTD Class="bg-primary text-white">Fecha Nacimiento</BSTD>
+                    </BSTR>
+                </BSTHead>
+                <BSTBody>
+                    
+                        <BSTR>
+                            <BSTD>@autor.AutorID</BSTD>
+                            <BSTD>@autor.NombreAutor</BSTD>
+                            <BSTD>@autor.Nacionalidad</BSTD>
+                            <BSTD>@autor.FechaNacimiento</BSTD>
+                        </BSTR>
+                    
+                </BSTBody>
+            </BSTable>
+            <BSAlert Color="BlazorStrap.BSColor.Success" HasIcon="true">Autor encontrado</BSAlert>
+        }
+        else
+        {
+            <BSAlert Color="BlazorStrap.BSColor.Danger" HasIcon="true">@MessageGetID</BSAlert>
+        }
+        </BSContainer>
+        <hr />
+
+        <BSContainer Container="Container.Large">
+            <h1>Formulario para insertar nuevos autores</h1>
+
+        </BSContainer>
+
+       
 
     
     </body>
@@ -28,6 +96,7 @@
 
 @code {
 
+    //Metodo get para poder traer todos los registros de autores
     public List<Autor>? listaA { get; set; }
     public string? MessageGet { get; set; }
     protected async Task GetAutores()
@@ -52,6 +121,148 @@
             listaA = null;
             MessageGet = e.Message;
 
+        }
+    }
+
+    //metodo get filtrado para traer un solo registro
+    public Autor? autor { get; set; }
+    public string? MessageGetID {get;set;}
+    public int CodAutor { get; set; }
+    protected async Task TraerAutor()
+    {
+        try
+        {
+            string url = "https://localhost:7016/api/Autors/"+CodAutor;
+            var response = await ServiciosAutor.GetAutor<Autor>(url);
+            if(!response.Error)
+            {
+                autor = response.Response;
+                MessageGetID = String.Empty;
+            }
+            else
+            {
+                autor = null;
+                MessageGetID = await response.GetErrorMessageAsync();
+            }
+
+        }catch (Exception e)
+        {
+            autor = null;
+            MessageGetID = e.Message;
+
+        }
+    }
+
+    //Metodo para poder insertar un autor
+    public Autor AutorPost { get; set; } = new Autor();
+    public bool SuccessPost = false;
+    public string MessagePost { get; set; }
+    protected async Task PostAutor()
+    {
+        try
+        {
+            string url = "https://localhost:7016/api/Autors";
+            var response = await ServiciosAutor.PostAutor<Autor>(url, AutorPost);
+            if(!response.Error)
+            {
+                SuccessPost = true;
+                MessagePost = String.Empty;
+            }
+            else
+            {
+                SuccessPost = false;
+                MessagePost = await response.GetErrorMessageAsync();
+            }
+
+        }catch (Exception e)
+        {
+            SuccessPost = false;
+            MessagePost = e.Message;
+
+        }
+    }
+
+    //metodo para eliminar un autor
+    public int coddelete { get; set; }
+    public bool SuccessDelete =false;
+    public string? MessageDelete { get; set; }
+    protected async Task DeleteAutor()
+    {
+        try{
+            string url = "https://localhost:7016/api/Autors/" + coddelete;
+            var response = await ServiciosAutor.DeleteAutor(url);
+            if(!response.Error)
+            {
+                SuccessDelete = true;
+                MessageDelete = String.Empty;
+            }
+            else
+            {
+                SuccessDelete=false;
+                MessageDelete = await response.GetErrorMessageAsync();
+            }
+
+        }catch (Exception e)
+        {
+            SuccessDelete = false;
+            MessageDelete = e.Message;
+
+        }
+    }
+
+    //Metodo para editar un autor
+    public int CodPut { get; set; }
+    public Autor? AutorPut { get; set; }
+    public string? MessageGetPut { get; set; }
+    protected async Task GetPutAutor()
+    {
+        try
+        {
+            string url = "https://localhost:7016/api/Autors/" + CodPut;
+            var response = await ServiciosAutor.GetAutor<Autor>(url);
+            if (!response.Error)
+            {
+                AutorPut = response.Response;
+                MessageGetPut = String.Empty;
+            }
+            else
+            {
+                AutorPut = null;
+                MessageGetPut = await response.GetErrorMessageAsync();
+            }
+        }catch (Exception e)
+        {
+            AutorPut = null;
+            MessageGetPut = e.Message;
+        }
+
+    }
+
+
+    public bool SuccessPut = false;
+    public string? MessagePut { get; set; }
+    protected async Task PutAutor()
+    {
+        try
+        {
+            string url = "https://localhost:7016/api/Autors/" + CodPut;
+            var response=await ServiciosAutor.PutAutor<Autor>(url,AutorPut);
+            if(!response.Error)
+            {
+                SuccessPut = true;
+                MessagePut = String.Empty;
+
+            }
+            else
+            {
+                SuccessPut = false;
+                MessagePut = await response.GetErrorMessageAsync();
+            }
+
+        }catch(Exception e)
+        {
+            SuccessPut = false;
+            MessagePut = e.Message;
         }
     }
 

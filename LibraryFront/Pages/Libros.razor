@@ -173,8 +173,35 @@
 				</p>
 				<p>
 					Modifique el codigo del autor del Libro:
-					<input class="input" type="text" @bind="LibroPut.IDAutor" required />
 				</p>
+				<BSButton Color="BlazorStrap.BSColor.Primary" IsOutlined="true" @onclick="GetAutores">Seleccionar</BSButton>
+				@if (listaA != null)
+				{
+					<BSTable Class="tablamorada">
+						<BSTHead>
+							<BSTR>
+								<BSTD>AutorID</BSTD>
+								<BSTD>Nombre</BSTD>
+								<BSTD>Nacionalidad</BSTD>
+							</BSTR>
+						</BSTHead>
+						<BSTBody>
+							@foreach(Autor item in listaA)
+							{
+								<BSTR @onclick="() => SelecionarCodigoAutor(item)">
+									<BSTD>@item.AutorID</BSTD>
+									<BSTD>@item.NombreAutor</BSTD>
+									<BSTD>@item.Nacionalidad</BSTD>
+								</BSTR>
+							}
+						</BSTBody>
+					</BSTable>
+					<p>
+						Codigo Seleccionado:
+						<input class="input" type="text" @bind="CodAutor" readonly />
+					</p>
+					
+				}
 				<p>
 					Modifique la disponibilidad del Libro:
 					<input class="input" type="text" @bind="LibroPut.Estado" required />
@@ -379,6 +406,36 @@
 		}
 	}
 
+	//Metodo para traer A los Autores
+	public List<Autor>? listaA { get; set; }
+	public string? MessageGetAutor { get; set; }
+	protected async Task GetAutores()
+	{
+		try
+		{
+			string url = "https://localhost:7016/api/Autors";
+			var response = await ServiciosAutor.GetAutor<List<Autor>>(url);
+			if (!response.Error)
+			{
+				listaA = response.Response;
+				MessageGetAutor = String.Empty;
+			}
+			else
+			{
+				listaA = null;
+				MessageGetAutor = await response.GetErrorMessageAsync();
+			}
+
+		}
+		catch (Exception e)
+		{
+			listaA = null;
+			MessageGetAutor = e.Message;
+
+		}
+	}
+
+
 	//Metodo para poder activar el modal
 	public BSModal? Minsert { get; set; }
 	public async Task ModalInsert()
@@ -396,6 +453,14 @@
 		{
 			await Minsert.ToggleAsync();
 		}
+	}
+
+	public int CodAutor { get; set; }
+	public void SelecionarCodigoAutor(Autor item)
+	{
+		CodAutor = item.AutorID;
+		LibroPut.IDAutor = CodAutor;
+
 	}
 
 }

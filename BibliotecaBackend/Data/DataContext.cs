@@ -14,7 +14,9 @@ namespace BibliotecaBackend.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            //modelBuilder.Entity<Tipo>().HasIndex(c => c.Name).IsUnique();
-        }
+			//modelBuilder.Entity<Tipo>().HasIndex(c => c.Name).IsUnique();
+			modelBuilder.Entity<Prestamo>()
+		   .ToTable(tb => tb.UseSqlOutputClause(false));
+		}
     }
 }

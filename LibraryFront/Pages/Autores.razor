@@ -136,7 +136,7 @@
             <h2>Eliminacion de Autores</h2>
             <p>
                 Digite el codigo del Autor a eliminar:
-                <input type="text" @bind="coddelete" required />
+            <input class="input" type="text" @bind="coddelete" required />
             </p>
             <BSButton Color="BlazorStrap.BSColor.Primary" IsOutlined="true" @onclick="DeleteAutor">Eliminar</BSButton>
             @if(SuccessDelete!=false)
@@ -157,7 +157,7 @@
         <h2>Modificar Autores</h2>
         <p>
             Escribe el Código del Autor:
-            <input type="text" @bind="CodPut" required />
+            <input class="input" type="text" @bind="CodPut" required />
         </p>
         <BSButton Color="BlazorStrap.BSColor.Primary" IsOutlined="true" @onclick="GetPutAutor">Buscarlo</BSButton>
 

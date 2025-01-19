@@ -5,23 +5,25 @@
     <html>
     <head>
         <title>Autores</title>
-        <link rel="stylesheet" href="~/css/app.css" />
+        <link rel="stylesheet" href="~/css/app.css" /> 
     </head>
     <body>
-        <h1>Autores</h1>
+        <h1 class="TituloPrincipal">Autores</h1>
+        <hr />
 
-        <BSContainer Container="Container.Large">
+
+        <BSContainer class="Container">
             <h2>Traer todos los Autores Registrados</h2>
         <BSButton Color="BlazorStrap.BSColor.Primary" IsOutlined="true" @onclick="GetAutores">Buscarlos</BSButton>
         @if (listaA != null)
         {
-            <BSTable Class="table table-striped table-bordered table-hover">
+            <BSTable Class="tablamorada">
                 <BSTHead>
                     <BSTR>
-                        <BSTD Class="bg-primary text-white">AutorID</BSTD>
-                        <BSTD Class="bg-primary text-white">Nombre</BSTD>
-                        <BSTD Class="bg-primary text-white">Nacionalidad</BSTD>
-                        <BSTD Class="bg-primary text-white">Fecha Nacimiento</BSTD>
+                        <BSTD>AutorID</BSTD>
+                        <BSTD>Nombre</BSTD>
+                        <BSTD>Nacionalidad</BSTD>
+                        <BSTD>Fecha Nacimiento</BSTD>
                     </BSTR>
                 </BSTHead>
                 <BSTBody>
@@ -50,22 +52,22 @@
 
 
 
-        <BSContainer Container="Container.Large">
-            <h1>Busqueda filtrada de Autores</h1>
+    <BSContainer class="Container">
+            <h2>Busqueda filtrada de Autores</h2>
             <p>
                 Digite el Codigo del Autor:
-                <input type="text" @bind="CodAutor" required />
+            <input class="input" type="text" @bind="CodAutor" required />
             </p>
         <BSButton Color="BlazorStrap.BSColor.Primary" IsOutlined="true" @onclick="TraerAutor">Traerlo</BSButton>
           @if(autor!=null)
             {
-            <BSTable Class="table table-striped table-bordered table-hover">
+            <BSTable Class="tablamorada">
                 <BSTHead>
                     <BSTR>
-                        <BSTD Class="bg-primary text-white">AutorID</BSTD>
-                        <BSTD Class="bg-primary text-white">Nombre</BSTD>
-                        <BSTD Class="bg-primary text-white">Nacionalidad</BSTD>
-                        <BSTD Class="bg-primary text-white">Fecha Nacimiento</BSTD>
+                        <BSTD>AutorID</BSTD>
+                        <BSTD>Nombre</BSTD>
+                        <BSTD>Nacionalidad</BSTD>
+                        <BSTD>Fecha Nacimiento</BSTD>
                     </BSTR>
                 </BSTHead>
                 <BSTBody>
@@ -90,8 +92,8 @@
         <hr />
 
 
-        <BSContainer Container="Container.Large">
-            <h1>Formulario para insertar nuevos autores</h1>
+    <BSContainer class="Container">
+            <h2>Formulario para insertar nuevos autores</h2>
             <BSButton Color="BlazorStrap.BSColor.Dark" IsOutlined="true" @onclick="Activar">Activar formulario</BSButton>
 
         <BSModal @ref="AuthorModal">
@@ -130,8 +132,8 @@
         <hr />
 
 
-        <BSContainer Container="Container.Large">
-            <h1>Eliminacion de Autores</h1>
+    <BSContainer class="Container">
+            <h2>Eliminacion de Autores</h2>
             <p>
                 Digite el codigo del Autor a eliminar:
                 <input type="text" @bind="coddelete" required />
@@ -151,8 +153,8 @@
     <hr />
 
 
-    <BSContainer Container="Container.Large">
-        <h1>Modificar Autores</h1>
+    <BSContainer class="Container">
+        <h2>Modificar Autores</h2>
         <p>
             Escribe el Código del Autor:
             <input type="text" @bind="CodPut" required />

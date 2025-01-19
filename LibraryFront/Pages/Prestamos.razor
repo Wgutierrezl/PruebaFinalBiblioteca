@@ -9,10 +9,10 @@
 		<link rel="stylesheet" href="~/css/app.css" />
     </head>
     <body>
-		<h1>Prestamos</h1>
+		<h1 class="TituloPrincipal">Prestamos</h1>
 		<hr />
 
-		<BSContainer Container="Container.Large">
+		<BSContainer class="Container">
 			<h2>Busqueda de Prestamos</h2>
 			<p>
 				Traer todos los prestamos hechos:
@@ -20,7 +20,7 @@
 			<BSButton Color="BlazorStrap.BSColor.Primary" IsOutlined="true" @onclick="TraerPrestamos">Traerlos</BSButton>
 			@if(ListaP!=null)
 			{
-				<BSTable>
+			<BSTable Class="tablamorada">
 					<BSTHead>
 						<BSTR>
 							<BSTD>PrestamoID</BSTD>
@@ -56,16 +56,16 @@
 	</BSContainer>
 	<hr />
 
-	<BSContainer Container="Container.Large">
+	<BSContainer class="Container">
 		<h2>Busqueda filtrada de libros</h2>
 		<p>
 			Digite el codigo del Prestamo:
-			<input type="text" @bind="CodPrestamo" required />
+			<input class="input" type="text" @bind="CodPrestamo" required />
 		</p>
 		<BSButton Color="BlazorStrap.BSColor.Primary" IsOutlined="true" @onclick="PrestamoFiltrado">Traerlo</BSButton>
 		@if (prestamo != null)
 		{
-			<BSTable>
+			<BSTable Class="tablamorada">
 				<BSTHead>
 					<BSTR>
 						<BSTD>PrestamoID</BSTD>
@@ -96,11 +96,11 @@
 	</BSContainer>
 	<hr />
 
-	<BSContainer Container="Container.Large">
+	<BSContainer class="Container">
 		<h2>Eliminar registro de prestamos</h2>
 		<p>
 			Digite el codigo del prestamo a eliminar:
-			<input type="text" @bind="CodDelete" required />
+			<input class="input" type="text" @bind="CodDelete" required />
 		</p>
 		<BSButton Color="BlazorStrap.BSColor.Primary" IsOutlined="true" @onclick="EliminarPrestamo">Eliminar</BSButton>
 		@if(SuccessDelete!=false)
@@ -115,15 +115,15 @@
 
 	<hr />
 
-	<BSContainer Container="Container.Large">
+	<div class="Container">
 		<h2>Formulario para agregar prestamos</h2>
 		<p>
 			Selecciona el libro que desees:
 		</p>
 		<BSButton Color="BlazorStrap.BSColor.Primary" IsOutlined="true" @onclick="GetLibro">Seleccionar</BSButton>
-		@if(ListL!=null)
+		@if (ListL != null)
 		{
-			<BSTable>
+			<BSTable Class="tablamorada">
 				<BSTHead>
 					<BSTR>
 						<BSTD>LibroID</BSTD>
@@ -149,15 +149,15 @@
 
 		<p>
 			Digite su nombre:
-			<input type="text" @bind="PrestamoPost.NombreMiembro" required />
+			<input class="input" type="text" @bind="PrestamoPost.NombreMiembro" required />
 		</p>
 		<p>
 			Fecha de prestamo:
-			<input type="text" value="@FechaActual.ToString("yyyy-MM-dd")" readonly />
+			<input class="input" type="text" value="@FechaActual.ToString("yyyy-MM-dd")" readonly />
 		</p>
 		<p>
 			Digite la fecha en que devolvera el libro:
-			<input type="date" @bind="PrestamoPost.FechaDevolucion" required />
+			<input class="input" type="date" @bind="PrestamoPost.FechaDevolucion" required />
 		</p>
 		<select id="Operacion" @bind="Estado">
 			<option value="Pendiente">Pendiente</option>
@@ -165,7 +165,7 @@
 		</select>
 		<p>Estado seleccionado:@Estado</p>
 		<BSButton Color="BlazorStrap.BSColor.Primary" IsOutlined="true" @onclick="PostPrestamos">Agregar</BSButton>
-		@if(SuccessPost!=false)
+		@if (SuccessPost != false)
 		{
 			<BSAlert Color="BlazorStrap.BSColor.Success" HasIcon="true">Insercion Correcta</BSAlert>
 		}
@@ -173,15 +173,15 @@
 		{
 			<BSAlert Color="BlazorStrap.BSColor.Danger" HasIcon="true">@MessagePost</BSAlert>
 		}
-	</BSContainer>
-
+	</div>
+		
 	<hr />
 
-	<BSContainer Container="Container.Large">
+	<BSContainer class="Container">
 		<h2>Modificar la informacion de un prestamo</h2>
 		<p>
 			Digita el codigo de prestamo a modificar:
-			<input type="text" @bind="CodPut" required />
+			<input class="input" type="text" @bind="CodPut" required />
 		</p>
 		<BSButton Color="BlazorStrap.BSColor.Primary" IsOutlined="true" @onclick="GetPutPrestamo">Buscarlo</BSButton>	
 		@if (PrestamoPut != null)

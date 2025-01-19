@@ -101,3 +101,113 @@ a, .btn-link {
 code {
     color: #c02d76;
 }
+
+/*Aqui empieza mis estilos css*/
+.TituloPrincipal {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Elegante y moderno */
+    font-size: 2.5rem; /* Tamaño ajustado para resaltar el título */
+    color: #44067a; /* Gris oscuro, combina con los temas modernos */
+    text-align: left; /* Centrado, ideal para encabezados principales */
+    margin-top: 20px; /* Espaciado limpio */
+    letter-spacing: 0.05em; /* Espaciado suave entre letras */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+h2{
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size:2rem;
+    color:black;
+    text-align:left;
+    margin-bottom:20px
+}
+
+p {
+    font-family: 'Arial', sans-serif;
+    font-size: 1rem;
+    color: #333333;
+    line-height:1.6;
+    margin-bottom:15px
+}
+
+.Container {
+    background-color: #f8f9fa;
+    border-color: blueviolet;
+    padding: 15px;
+    border: 1px solid #8931d6;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+.input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #8d219e;
+    border-radius: 5px;
+    transition: border-color 0.3s,box-shadow 0.3s
+}
+
+.input:focus{
+    border-color:blueviolet;
+    box-shadow:0 0 8px rgba(0,123,255,0.25)
+}
+
+.boton {
+    color: black;
+    background-color: white;
+    border-color:black;
+    font-size:1rem;
+    border: 1px solid :#6a0dad;
+    padding:0.5rem 1rem;
+    border-radius:0.25rem;
+    cursor:pointer
+}
+
+    .boton:hover {
+        background-color: #6a0dad;
+        border-color: #6a0dad;
+        Color:white;
+    }
+
+.Container2 {
+    background-color: #ffff;
+    border-color: blue;
+    padding: 15px;
+    border: 1px solid #9a5fcf;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+.tablamorada {
+    width: 100%;
+    border-collapse: collapse
+}
+
+.tablamorada th, .tablamorada td{
+    text-align:left;
+    padding:10px;
+    border:1px solid #ddd
+
+}
+
+    .tablamorada th {
+        background-color: #6f42c1;
+        color:white;
+        cursor:pointer
+    }
+
+        .tablamorada th:hover {
+            background-color: #5e34a6;
+        }
+
+    .tablamorada tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    .table tr:nth-child(odd) {
+        background-color: #ffffff;
+    }
+
+.table tr:hover {
+    background-color: #ece4f4; /* Fondo suave al pasar el mouse */
+}

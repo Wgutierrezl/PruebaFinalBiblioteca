@@ -9,13 +9,16 @@
 		<link rel="stylesheet" href="~/css/app.css" />
     </head>
     <body>
-		<h1>Libros</h1>
-		<BSContainer Container="Container.Large">
+		<h1 class="TituloPrincipal">Libros</h1>
+		<hr />
+
+		<BSContainer class="Container">
 			<h2>Busqueda de Libros</h2>
-			<BSButton Color="BlazorStrap.BSColor.Dark" IsOutlined="true" @onclick="GetLibro">Traer libros</BSButton>
+			@* <BSButton Color="BlazorStrap.BSColor.Dark" IsOutlined="true" @onclick="GetLibro">Traer libros</BSButton> *@
+			<button class="boton" @onclick="GetLibro">Traer Libros</button>
 			@if(ListL!=null)
 			{
-				<BSTable>
+			<BSTable Class="tablamorada">
 					<BSTHead>
 						<BSTR>
 							<BSTD>LibroID</BSTD>
@@ -47,16 +50,17 @@
 	</BSContainer>
 	<hr />
 
-	<BSContainer Container="Container.Large">
+	<BSContainer class="Container">
 		<h2>Busqueda filtrada de Libros</h2>
 		<p>
 			Digite el Codigo del Libro:
-			<input type="text" @bind="CodLibro" required />
+			<input class="input" type="text" @bind="CodLibro" required />
 		</p>
-		<BSButton Color="BlazorStrap.BSColor.Dark" IsOutlined="true" @onclick="Gefiltrado">Traerlo</BSButton>
+		@* <BSButton Color="BlazorStrap.BSColor.Dark" IsOutlined="true" @onclick="Gefiltrado">Traerlo</BSButton> *@
+		<button class="boton" @onclick="Gefiltrado">Traerlos</button>
 		@if(libro!=null)
 		{
-			<BSTable>
+			<BSTable Class="tablamorada">
 				<BSTHead>
 					<BSTR>
 						<BSTD>LibroID</BSTD>
@@ -76,6 +80,7 @@
 						</BSTR>	
 				</BSTBody>
 			</BSTable>
+			<BSAlert Color="BlazorStrap.BSColor.Success" HasIcon="true">Peticion Exitosa</BSAlert>
 			
 		}
 		else
@@ -86,13 +91,14 @@
 
 	<hr />
 
-	<BSContainer Container="Container.Large">
+	<BSContainer class="Container">
 		<h2>Eliminar Libros</h2>
 		<p>
 			Digite el codigo del Libro para eliminar:
-			<input type="text" @bind="CodDelete" required />
+			<input class="input" type="text" @bind="CodDelete" required />
 		</p>
-		<BSButton Color="BlazorStrap.BSColor.Dark" IsOutlined="true" @onclick="EliminarLibro">Eliminarlos</BSButton>
+		@* <BSButton Color="BlazorStrap.BSColor.Dark" IsOutlined="true" @onclick="EliminarLibro">Eliminarlos</BSButton> *@
+		<button class="boton" @onclick="EliminarLibro">Eliminarlo</button>
 		@if(SuccessDelete!=false)
 		{
 			<BSAlert Color="BlazorStrap.BSColor.Success" HasIcon="true">Eliminacion Correcta</BSAlert>
@@ -105,10 +111,10 @@
 
 	<hr />
 
-	<BSContainer Container="Container.Large">
+	<BSContainer class="Container">
 		<h2>Formulario para insertar Libros</h2>
-		<BSButton Color="BlazorStrap.BSColor.Dark" IsOutlined="true" @onclick="ModalInsert">Activar formulario</BSButton>
-
+		@* <BSButton Color="BlazorStrap.BSColor.Dark" IsOutlined="true" @onclick="ModalInsert">Activar formulario</BSButton> *@
+		<button class="boton" @onclick="ModalInsert">Activar formulario</button>
 		<BSModal @ref="Minsert">
 			<BSModalHeader>
 				<h2>Insertar Libros</h2>
@@ -146,34 +152,34 @@
 
 	<hr />
 
-	<BSContainer Container="Container.Large">
+	<BSContainer class="Container">
 		<h2>Modificar registro de Libros</h2>
 		<p>
 			Digite el codigo del Libro a modificar:
-			<input type="text" @bind="CodPut" required />
+			<input class="input" type="text" @bind="CodPut" required />
 		</p>
-		<BSButton Color="BlazorStrap.BSColor.Primary" IsOutlined="true" @onclick="GetPutLibros">Buscarlo</BSButton>
+		<button class="boton" @onclick="GetPutLibros">Buscarlo</button>
 		@if(LibroPut!=null)
 		{
-			<div>
+			<div class="Container2">
 				<h2>Libro encontrado</h2>
 				<p>
 					Modifique el Nombre del Libro:
-					<input type="text" @bind="LibroPut.NombreLibro" required />
+					<input class="input" type="text" @bind="LibroPut.NombreLibro" required />
 				</p>
 				<p>
 					Modifique el Genero del Libro:
-					<input type="text" @bind="LibroPut.Genero" required />
+					<input class="input"  type="text" @bind="LibroPut.Genero" required />
 				</p>
 				<p>
 					Modifique el codigo del autor del Libro:
-					<input type="text" @bind="LibroPut.IDAutor" required />
+					<input class="input" type="text" @bind="LibroPut.IDAutor" required />
 				</p>
 				<p>
 					Modifique la disponibilidad del Libro:
-					<input type="text" @bind="LibroPut.Estado" required />
+					<input class="input" type="text" @bind="LibroPut.Estado" required />
 				</p>
-				<BSButton Color="BlazorStrap.BSColor.Primary" IsOutlined="true" @onclick="PutLibro">Modificar</BSButton>
+				<button class="boton" @onclick="PutLibro">Modificar</button>
 				@if(SuccessPut!=null)
 				{
 					<BSAlert Color="BlazorStrap.BSColor.Success" HasIcon="true">Modificado correctamente</BSAlert>
